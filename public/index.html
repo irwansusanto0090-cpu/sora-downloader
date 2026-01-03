@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sora Downloader Pro | Tekno AI Global</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -82,42 +82,46 @@
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-x-hidden">
 
-    <!-- Decorative Elements -->
+    <!-- Decorative Elements (Mobile Optimized) -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
-        <div class="absolute top-[-10%] left-[20%] w-96 h-96 bg-blue-600/20 rounded-full blur-[100px]"></div>
-        <div class="absolute bottom-[-10%] right-[20%] w-96 h-96 bg-purple-600/20 rounded-full blur-[100px]"></div>
+        <div class="absolute top-[-5%] left-[10%] w-64 h-64 md:w-96 md:h-96 bg-blue-600/20 rounded-full blur-[80px]">
+        </div>
+        <div
+            class="absolute bottom-[-5%] right-[10%] w-64 h-64 md:w-96 md:h-96 bg-purple-600/20 rounded-full blur-[80px]">
+        </div>
     </div>
 
     <!-- Main Card -->
-    <div class="glass-panel w-full max-w-lg rounded-3xl p-8 relative z-10 fade-in">
+    <div class="glass-panel w-full max-w-lg rounded-3xl p-6 md:p-8 relative z-10 fade-in mx-auto">
 
         <!-- Header -->
-        <div class="text-center mb-10">
+        <div class="text-center mb-8 md:mb-10">
             <div
-                class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-slate-800/50 mb-4 border border-white/5 shadow-inner">
-                <i class="fas fa-bolt text-3xl gradient-text"></i>
+                class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-slate-800/50 mb-4 border border-white/5 shadow-inner">
+                <i class="fas fa-bolt text-2xl md:text-3xl gradient-text"></i>
             </div>
-            <h1 class="text-4xl font-bold mb-2 tracking-tight">Sora <span class="gradient-text">Downloader</span></h1>
-            <div class="h-1 w-16 bg-gradient-to-r from-sky-500 to-purple-500 mx-auto rounded-full mb-3"></div>
-            <p class="text-slate-400 text-sm font-light">Unduh video AI tanpa watermark. Cepat & Jernih.</p>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2 tracking-tight">Sora <span
+                    class="gradient-text">Downloader</span></h1>
+            <div class="h-1 w-12 md:w-16 bg-gradient-to-r from-sky-500 to-purple-500 mx-auto rounded-full mb-3"></div>
+            <p class="text-slate-400 text-xs md:text-sm font-light">Unduh video AI tanpa watermark. Cepat & Jernih.</p>
         </div>
 
         <!-- Input Section -->
-        <div class="space-y-5">
+        <div id="inputForm" class="space-y-4 md:space-y-5">
             <div class="relative group">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <i class="fas fa-link text-slate-500 group-focus-within:text-sky-400 transition-colors"></i>
                 </div>
                 <input type="text" id="soraUrl"
-                    class="input-glass block w-full pl-11 pr-4 py-4 rounded-xl text-white placeholder-slate-500 focus:outline-none"
+                    class="input-glass block w-full pl-11 pr-4 py-3.5 md:py-4 rounded-xl text-white placeholder-slate-500 focus:outline-none text-sm md:text-base"
                     placeholder="Tempel tautan video Sora di sini..."
                     value="https://sora.chatgpt.com/p/s_6958ce7c4014819193a26bf8c15f4030">
             </div>
 
             <button id="downloadBtn" onclick="processVideo()"
-                class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-blue-900/30 transform transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3">
+                class="w-full py-3.5 md:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-blue-900/30 transform transition-all active:scale-[0.98] flex items-center justify-center gap-3 text-sm md:text-base">
                 <span id="btnText" class="tracking-wide">PROSES VIDEO</span>
                 <i id="btnIcon" class="fas fa-arrow-right"></i>
                 <div id="loadingSpinner" class="loader hidden"></div>
@@ -127,15 +131,22 @@
         <!-- Error Message -->
         <div id="errorMessage"
             class="hidden mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm flex items-start gap-3 fade-in">
-            <i class="fas fa-exclamation-triangle mt-1"></i>
+            <i class="fas fa-exclamation-triangle mt-1 flex-shrink-0"></i>
             <span id="errorText">Terjadi kesalahan.</span>
         </div>
 
         <!-- Result Section -->
-        <div id="resultSection" class="hidden mt-8 border-t border-white/5 pt-8 fade-in">
-            <h3 class="text-sm font-semibold mb-4 text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                <i class="fas fa-check-circle text-green-400"></i> Video Siap
-            </h3>
+        <div id="resultSection" class="hidden mt-6 md:mt-8 border-t border-white/5 pt-6 md:pt-8 fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h3
+                    class="text-xs md:text-sm font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fas fa-check-circle text-green-400"></i> Video Siap
+                </h3>
+                <button onclick="resetApp()"
+                    class="text-xs text-slate-400 hover:text-white flex items-center gap-1 transition-colors">
+                    <i class="fas fa-redo-alt"></i> Download Baru
+                </button>
+            </div>
 
             <div
                 class="rounded-2xl overflow-hidden bg-black/50 aspect-video mb-5 relative group border border-white/10 shadow-2xl">
@@ -143,27 +154,27 @@
             </div>
 
             <a id="downloadLink" href="#"
-                class="flex items-center justify-center gap-2 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all border border-white/5 hover:border-white/10 group">
+                class="flex items-center justify-center gap-2 py-3.5 md:py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all border border-white/5 hover:border-white/10 group mb-3">
                 <i class="fas fa-download group-hover:-translate-y-1 transition-transform"></i>
-                <span class="font-medium">Download HD (MP4)</span>
+                <span class="font-medium text-sm md:text-base">Download HD (MP4)</span>
             </a>
 
-            <p class="text-[10px] text-slate-500 text-center mt-4">
+            <p class="text-[10px] text-slate-500 text-center">
                 Server berkecepatan tinggi oleh Vercel Edge Network
             </p>
         </div>
     </div>
 
     <!-- Professional Footer -->
-    <div class="mt-12 text-center z-10 fade-in" style="animation-delay: 0.2s;">
-        <p class="text-slate-500 text-xs font-medium tracking-wide mb-1">
+    <div class="mt-8 md:mt-12 text-center z-10 fade-in py-4" style="animation-delay: 0.2s;">
+        <p class="text-slate-500 text-[10px] md:text-xs font-medium tracking-wide mb-1">
             POWERED BY
         </p>
-        <p class="text-slate-400 text-sm font-semibold">
+        <p class="text-slate-400 text-xs md:text-sm font-semibold">
             Tools by <span class="text-sky-400">Ian Cweper</span> <span class="mx-2 text-slate-600">|</span> <span
                 class="text-white">Tekno AI Global</span>
         </p>
-        <div class="mt-4 flex justify-center gap-4 text-slate-600">
+        <div class="mt-4 flex justify-center gap-6 text-slate-600 text-lg">
             <i class="fab fa-github hover:text-white transition-colors cursor-pointer"></i>
             <i class="fab fa-telegram hover:text-blue-400 transition-colors cursor-pointer"></i>
             <i class="fas fa-globe hover:text-emerald-400 transition-colors cursor-pointer"></i>
@@ -171,24 +182,32 @@
     </div>
 
     <script>
+        // Prevent zoom on double tap for mobile
+        document.addEventListener('dblclick', function (event) {
+            event.preventDefault();
+        }, { passive: false });
+
         async function processVideo() {
-            const url = document.getElementById('soraUrl').value.trim();
+            const urlInput = document.getElementById('soraUrl');
+            const url = urlInput.value.trim();
             const btn = document.getElementById('downloadBtn');
             const btnText = document.getElementById('btnText');
             const btnIcon = document.getElementById('btnIcon');
             const spinner = document.getElementById('loadingSpinner');
             const errorDiv = document.getElementById('errorMessage');
             const resultSection = document.getElementById('resultSection');
+            const inputForm = document.getElementById('inputForm');
 
             errorDiv.classList.add('hidden');
-            resultSection.classList.add('hidden');
 
             if (!url) {
                 showError("Mohon masukkan tautan video terlebih dahulu.");
                 return;
             }
 
-            // Loading state
+            // UI Update: Hilangkan input agar fokus ke hasil
+            // inputForm.classList.add('opacity-50', 'pointer-events-none');
+
             btn.disabled = true;
             btnText.textContent = "MEMPROSES...";
             btnIcon.classList.add('hidden');
@@ -207,7 +226,6 @@
                 const data = await response.json();
                 let videoUrl = null;
 
-                // Smart Parsing Logic
                 if (data.data && Array.isArray(data.data.downloads) && data.data.downloads.length > 0) {
                     videoUrl = data.data.downloads[0].url;
                 } else if (data.url) videoUrl = data.url;
@@ -217,20 +235,25 @@
                     const dlLink = document.getElementById('downloadLink');
                     document.getElementById('videoPreview').src = videoUrl;
 
-                    // Direct Download Setup
                     dlLink.href = `/api/video-proxy?url=${encodeURIComponent(videoUrl)}`;
                     dlLink.setAttribute('download', '');
                     dlLink.removeAttribute('target');
 
-                    resultSection.classList.remove('hidden');
+                    // Sembunyikan form input agar tampilan bersih
+                    inputForm.classList.add('hidden');
 
-                    // Scroll to result smoothly
+                    resultSection.classList.remove('hidden');
                     resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
                 } else {
+                    // Restore form if failed
+                    inputForm.classList.remove('hidden');
                     showError("Video tidak ditemukan. Pastikan link valid dan tidak diprivat.");
                 }
 
             } catch (error) {
+                // Restore form if error
+                inputForm.classList.remove('hidden');
                 showError(error.message);
             } finally {
                 btn.disabled = false;
@@ -238,7 +261,29 @@
                 btnIcon.classList.remove('hidden');
                 spinner.classList.add('hidden');
                 btn.classList.remove('opacity-80', 'cursor-wait');
+                // inputForm.classList.remove('opacity-50', 'pointer-events-none');
             }
+        }
+
+        function resetApp() {
+            const resultSection = document.getElementById('resultSection');
+            const inputForm = document.getElementById('inputForm');
+            const urlInput = document.getElementById('soraUrl');
+            const videoPreview = document.getElementById('videoPreview');
+
+            // Stop video
+            videoPreview.pause();
+            videoPreview.src = "";
+
+            // Clear Input
+            urlInput.value = "";
+
+            // Toggle Visibility
+            resultSection.classList.add('hidden');
+            inputForm.classList.remove('hidden');
+
+            // Focus kembali ke input
+            setTimeout(() => urlInput.focus(), 100);
         }
 
         function showError(msg) {
