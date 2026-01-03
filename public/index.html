@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sora 2 Downloader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+        }
+
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .loader {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #38bdf8;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="glass w-full max-w-lg rounded-2xl shadow-2xl p-8">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold mb-2 text-white">Sora 2 Downloader</h1>
+            <p class="text-slate-400 text-sm">Versi Vercel (Deployed)</p>
+        </div>
+
+        <div class="space-y-4">
+            <input type="text" id="soraUrl"
+                class="block w-full p-4 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="https://sora.chatgpt.com/..."
+                value="https://sora.chatgpt.com/p/s_6958ce7c4014819193a26bf8c15f4030">
+            <button id="downloadBtn" onclick="processVideo()"
+                class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl flex items-center justify-center gap-2">
+                <span id="btnText">Proses Video</span>
+                <div id="loadingSpinner" class="loader hidden"></div>
+            </button>
+        </div>
+
+        <div id="errorMessage" class="hidden mt-4 p-4 bg-red-500/10 text-red-400 text-center rounded-xl"></div>
+
+        <div id="resultSection" class="hidden mt-8 pt-6 border-t border-slate-700">
+            <video id="videoPreview" class="w-full rounded-xl mb-4 bg-black" controls></video>
+            <a id="downloadLink" href="#"
+                class="block w-full py-3 bg-slate-700 text-center text-white rounded-lg font-medium">Unduh MP4</a>
+        </div>
+    </div>
+
+    <script>
+        async function processVideo() {
+            const url = document.getElementById('soraUrl').value.trim();
+            const btn = document.getElementById('downloadBtn');
+            const spinner = document.getElementById('loadingSpinner');
+
+            document.getElementById('errorMessage').classList.add('hidden');
+            document.getElementById('resultSection').classList.add('hidden');
+
+            if (!url) return alert("Masukkan URL!");
+
+            btn.disabled = true;
+            document.getElementById('btnText').textContent = "Memproses...";
+            spinner.classList.remove('hidden');
+
+            try {
+                // Call Vercel Backend
+                const response = await fetch("/api/sora-download", {
+                    method: "POST",
+                    headers: { "content-type": "application/json" },
+                    body: JSON.stringify({ shareLink: url })
+                });
+
+                if (!response.ok) throw new Error("Gagal menghubungi server");
+
+                const data = await response.json();
+                let videoUrl = null;
+
+                if (data.data && Array.isArray(data.data.downloads) && data.data.downloads.length > 0) {
+                    videoUrl = data.data.downloads[0].url;
+                } else if (data.url) videoUrl = data.url;
+                else if (data.data && data.data.url) videoUrl = data.data.url;
+
+                if (videoUrl) {
+                    const dlLink = document.getElementById('downloadLink');
+                    document.getElementById('videoPreview').src = videoUrl;
+
+                    // Use Proxy for Direct Download
+                    dlLink.href = `/api/video-proxy?url=${encodeURIComponent(videoUrl)}`;
+                    dlLink.setAttribute('download', '');
+                    dlLink.removeAttribute('target');
+
+                    document.getElementById('resultSection').classList.remove('hidden');
+                } else {
+                    document.getElementById('errorMessage').textContent = "Video tidak ditemukan.";
+                    document.getElementById('errorMessage').classList.remove('hidden');
+                }
+
+            } catch (error) {
+                document.getElementById('errorMessage').textContent = error.message;
+                document.getElementById('errorMessage').classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                document.getElementById('btnText').textContent = "Proses Video";
+                spinner.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+
+</html>
